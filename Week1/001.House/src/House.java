@@ -35,11 +35,6 @@ public class House extends Application {
 
         graphics.draw(new Line2D.Double(250,250,350,250));
         graphics.draw(new Line2D.Double(250,350,350,350));
-
-
-
-
-
     }
 
 
