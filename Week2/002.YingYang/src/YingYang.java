@@ -28,11 +28,59 @@ public class YingYang extends Application {
     }
 
 
-    public void draw(FXGraphics2D graphics)
+    public void draw(FXGraphics2D g2d)
     {
-        graphics.setTransform(new AffineTransform());
-        graphics.setBackground(Color.white);
-        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        g2d.setTransform(new AffineTransform());
+        g2d.setBackground(Color.white);
+        g2d.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        g2d.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
+        g2d.scale(1, -1);
+        g2d.setColor(Color.BLACK);
+        g2d.drawLine(0, 960, 0, -960);// assenstelsel y
+        g2d.setColor(Color.BLUE.brighter());
+        g2d.drawLine(-1080, 0, 1080, 0);// assenstelsel x
+        g2d.setColor(Color.green);
+
+
+
+
+        Area a = new Area(new Ellipse2D.Double(0,0,100,100));
+        Area b = new Area(new Ellipse2D.Double(0,100,100,100));
+        Area c = new Area(new Ellipse2D.Double(-50,0,200,200));
+        Area d = new Area(new Ellipse2D.Double(0,150,25,25));
+
+
+        g2d.setColor(Color.black);
+        g2d.fill(c);
+        g2d.draw(c);
+        g2d.setColor(Color.white);
+        g2d.fill(b);
+        g2d.setColor(Color.black);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 

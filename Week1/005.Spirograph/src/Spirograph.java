@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Random;
+
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.scene.Group;
@@ -38,6 +40,7 @@ public class Spirograph extends Application {
 
         Button start = new Button("Create Spinograph");
         Button clear = new Button("Clear Canvas");// nieuwe buttons
+        Button random = new Button("Random");
         topBar.getChildren().add(start);
         topBar.getChildren().add(clear);
         start.setOnAction(event -> {
@@ -60,7 +63,8 @@ public class Spirograph extends Application {
     
     
     public void draw(FXGraphics2D graphics) {
-        graphics.setColor(Color.BLUE);
+        Random random = new Random();
+        this.graphics.setColor(new Color(random.nextInt(1999999999)));
         double resolution = 0.01;
         double scaler = 1;
 
@@ -84,9 +88,7 @@ public class Spirograph extends Application {
         //you can use Double.parseDouble(v1.getText()) to get a double value from the first textfield
         //feel free to add more textfields or other controls if needed, but beware that swing components might clash in naming
     }
-    
-    
-    
+
     public static void main(String[] args) {
         launch(Spirograph.class);
     }
