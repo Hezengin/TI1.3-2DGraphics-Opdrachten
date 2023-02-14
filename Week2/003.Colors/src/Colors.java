@@ -27,7 +27,6 @@ public class Colors extends Application {
         primaryStage.show();
     }
 
-
     public void draw(FXGraphics2D graphics)
     {
         graphics.setTransform(new AffineTransform());
@@ -45,10 +44,8 @@ public class Colors extends Application {
         }
     }
 
-
     public static void main(String[] args)
     {
         launch(Colors.class);
     }
-
 }

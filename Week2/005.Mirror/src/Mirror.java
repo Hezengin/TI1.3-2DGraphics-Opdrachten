@@ -28,11 +28,29 @@ public class Mirror extends Application {
     }
 
 
-    public void draw(FXGraphics2D graphics)
-    {
+    public void draw(FXGraphics2D graphics) {
         graphics.setTransform(new AffineTransform());
         graphics.setBackground(Color.white);
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        graphics.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
+        graphics.scale(1, -1);
+        graphics.setColor(Color.black);
+        graphics.drawLine(0, 960, 0, -960);// assenstelsel y
+        graphics.setColor(Color.BLUE.brighter());
+        graphics.drawLine(-1080, 0, 1080, 0);// assenstelsel x
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.drawLine(-100,-250,100,250);
+        graphics.setColor(Color.RED);
+
+
+        graphics.setColor(Color.ORANGE);
+        Rectangle rec = new Rectangle(50,50,100,100);
+        graphics.draw(rec);
+
+
+        AffineTransform tx = new AffineTransform();
+
+
     }
 
 
