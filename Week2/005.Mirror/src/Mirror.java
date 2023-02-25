@@ -32,27 +32,33 @@ public class Mirror extends Application {
         graphics.setTransform(new AffineTransform());
         graphics.setBackground(Color.white);
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
         graphics.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
         graphics.scale(1, -1);
-        graphics.setColor(Color.black);
-        graphics.drawLine(0, 960, 0, -960);// assenstelsel y
-        graphics.setColor(Color.BLUE.brighter());
-        graphics.drawLine(-1080, 0, 1080, 0);// assenstelsel x
-        graphics.setColor(Color.DARK_GRAY);
-        graphics.drawLine(-100,-250,100,250);
+
+        // Draw axes
+        graphics.setColor(Color.BLACK);
+        graphics.drawLine(0, 960, 0, -960);
+        graphics.drawLine(-1080, 0, 1080, 0);
+
+        // Draw line y = 2.5x
         graphics.setColor(Color.RED);
+        Path2D line = new Path2D.Double();
+        line.moveTo(-300, -750);
+        line.lineTo(300, 750);
+        graphics.draw(line);
 
-
+        // Draw original square
+        Rectangle2D square = new Rectangle2D.Double(-50, 100, 100, 100);
         graphics.setColor(Color.ORANGE);
-        Rectangle rec = new Rectangle(50,50,100,100);
-        graphics.draw(rec);
+        graphics.draw(square);
 
+        AffineTransform mirrorTransform = new AffineTransform((2/(1+(2.5*2.5)))-1, 2*2.5/(1+(2.5*2.5)), 2*2.5/(1+(2.5*2.5)), (2*2.5*2.5/(1+(2.5*2.5)))-1, 0, 0);
+        Shape mirroredSquare = mirrorTransform.createTransformedShape(square);
 
-        AffineTransform tx = new AffineTransform();
-
-
+        graphics.setColor(Color.BLUE);
+        graphics.draw(mirroredSquare);
     }
-
 
     public static void main(String[] args)
     {
