@@ -16,7 +16,7 @@ import org.jfree.fx.ResizableCanvas;
 
 public class Rainbow extends Application {
     private ResizableCanvas canvas;
-    private ArrayList<String> array = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws Exception
     {
@@ -37,29 +37,23 @@ public class Rainbow extends Application {
 
         graphics.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
         graphics.scale(1, 1);
-
+        ArrayList<String> array = new ArrayList<>();
         Collections.addAll(array,"R","e","g","e","n","b","o","o","g");
-        Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, new Color(128, 0, 128)};
 
         Font font = new Font(Font.MONOSPACED,Font.BOLD,40);
-        for (String s : array) {
-            Shape shape = font.createGlyphVector(graphics.getFontRenderContext(),s).getOutline();
-            graphics.draw(shape);
-            shape.
-            update();
+        for (int i = 0; i < array.size(); i++) {
+            System.out.println(i);
+            String s = array.get(i);
+            Shape shape = font.createGlyphVector(graphics.getFontRenderContext(), s).getOutline();
+            graphics.setColor(Color.getHSBColor((float) i/array.size(), 1, 1));
+            graphics.rotate(Math.toRadians(-90));
+            graphics.fill(shape);
+            graphics.rotate(Math.toRadians(90));
+            graphics.rotate(Math.toRadians(20));
+            graphics.translate(0, -50);
         }
 
-
     }
-
-    public void update(FXGraphics2D graphics){
-        int a = 50;
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(20));
-        transform.translate(,a);
-        graphics.setTransform(transform);
-    }
-
 
     public static void main(String[] args)
     {

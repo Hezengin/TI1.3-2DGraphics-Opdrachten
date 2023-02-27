@@ -1,25 +1,25 @@
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class Renderable {
-    private Shape shape;
+
     private Color color;
     private double x;
     private double y;
+    private double size;
 
-    public Renderable(int x, int y, Shape shape, Color color){
+    public Renderable(int x, int y, double size, Color color){
         this.x = x;
         this.y = y;
         this.color = color;
-        this.shape = shape;
+        this.size = size;
     }
 
     public Shape getShape() {
-        return shape;
-    }
-    public void setShape(Shape shape) {
-        this.shape = shape;
+        Rectangle2D.Double rect = new Rectangle2D.Double(x,y,size,size);
+        return rect;
     }
 
     public Color getColor() {
@@ -43,8 +43,12 @@ public class Renderable {
         this.y = y;
     }
 
+    public double getSize() {
+        return size;
+    }
+
     public void draw(FXGraphics2D g2d){
         g2d.setColor(this.color);
-        g2d.fill(this.shape);
+        g2d.fill(getShape());
     }
 }
