@@ -21,9 +21,11 @@ public class MovingCharacter extends Application {
     private ResizableCanvas canvas;
     private BufferedImage[] tiles;
     private BufferedImage image;
+    private int currentTileIndex = 0;
+    private double positionX = 0.0;
+
     @Override
-    public void start(Stage stage) throws Exception
-    {
+    public void start(Stage stage) throws Exception {
 
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
@@ -32,18 +34,17 @@ public class MovingCharacter extends Application {
         try {
             image = ImageIO.read(getClass().getResource("/images/sprite.png"));
             tiles = new BufferedImage[24];
-            //knip de afbeelding op in 24 stukjes van 32x32 pixels.
-            for(int i = 0; i < 24; i++)
-                tiles[i] = image.getSubimage(0,0,50,70);
+            //de subimages van de srite uithalen.
+            for (int i = 0, j = 0; i < 400; i += 50, j++) {
+                tiles[j] = image.getSubimage(i, 260, 50, 75);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         new AnimationTimer() {
             long last = -1;
-
             @Override
-            public void handle(long now)
-            {
+            public void handle(long now) {
                 if (last == -1)
                     last = now;
                 update((now - last) / 1000000000.0);
@@ -58,28 +59,17 @@ public class MovingCharacter extends Application {
         draw(g2d);
     }
 
-    public void draw(FXGraphics2D graphics)
-    {
-        graphics.setTransform(new AffineTransform());
-        graphics.setBackground(Color.white);
-        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+    public void draw(FXGraphics2D graphics) {
+
+        graphics.drawImage(tiles[currentTileIndex],tx,null);
+    }
+
+    public void update(double deltaTime) {
         AffineTransform tx = new AffineTransform();
-
-        graphics.drawImage(tiles[1],tx,null);
-//        graphics.drawImage(tiles[2],tx,null);
-//        graphics.drawImage(tiles[3],tx,null);
-//        graphics.drawImage(tiles[4],tx,null);
-
+        tx.translate(positionX, 0);
     }
 
-
-    public void update(double deltaTime)
-    {
-    }
-
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(MovingCharacter.class);
     }
-
 }
