@@ -3,12 +3,14 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.Objects;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -20,9 +22,14 @@ import org.jfree.fx.ResizableCanvas;
 public class MovingCharacter extends Application {
     private ResizableCanvas canvas;
     private BufferedImage[] tiles;
+
+    private BufferedImage[] jump;
     private BufferedImage image;
-    private int currentTileIndex = 0;
-    private double positionX = 0.0;
+    private double angle = 0.0;
+    private int counter = 0;
+    private int location = 20;
+
+    private BufferedImage[] originalTiles;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -31,13 +38,25 @@ public class MovingCharacter extends Application {
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
+
+        canvas.setOnMousePressed(e -> {
+            jump();
+        });
+
         try {
             image = ImageIO.read(getClass().getResource("/images/sprite.png"));
-            tiles = new BufferedImage[24];
+            tiles = new BufferedImage[8];
+            jump = new BufferedImage[8];
             //de subimages van de srite uithalen.
-            for (int i = 0, j = 0; i < 400; i += 50, j++) {
-                tiles[j] = image.getSubimage(i, 260, 50, 75);
+            for (int i = 0,j =0 ; i < 8; j+=65,i++) {
+                jump[i] = image.getSubimage(j,320,50,61);
             }
+
+            for (int i = 0, j = 0; i < 8; j += 65, i++) {
+                tiles[i] = image.getSubimage(j, 260, 50, 61);
+            }
+            originalTiles = tiles;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,11 +66,17 @@ public class MovingCharacter extends Application {
             public void handle(long now) {
                 if (last == -1)
                     last = now;
-                update((now - last) / 1000000000.0);
+                update((now - last) / 1000000.0);
                 last = now;
                 draw(g2d);
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }.start();
+
 
         stage.setScene(new Scene(mainPane));
         stage.setTitle("Moving Character");
@@ -60,14 +85,45 @@ public class MovingCharacter extends Application {
     }
 
     public void draw(FXGraphics2D graphics) {
+        graphics.setBackground(Color.white);
+        graphics.clearRect(0,0,1920,1080);
+        AffineTransform tx = new AffineTransform();
+        tx.translate(location,0);
+        System.out.println(location);
 
-        graphics.drawImage(tiles[currentTileIndex],tx,null);
+        if (counter > 7){
+            counter = 0;
+        }
+        if (location > 1900){
+            location = 0;
+            tx.translate(location,0);
+        }
+        graphics.drawImage(tiles[counter],tx,null);
+
+        counter++;
+        location += 5;
     }
 
     public void update(double deltaTime) {
-        AffineTransform tx = new AffineTransform();
-        tx.translate(positionX, 0);
+        angle += 0.0005;
     }
+
+    private void jump() {
+        counter = 0;
+        tiles = jump;
+        new Thread(() -> {
+            for (int i = 0; i < 15; i++) {
+                location += 5;
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            tiles = originalTiles;
+        }).start();
+    }
+
 
     public static void main(String[] args) {
         launch(MovingCharacter.class);
