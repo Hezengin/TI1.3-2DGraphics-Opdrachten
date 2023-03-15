@@ -64,8 +64,6 @@ public class FadingImage extends Application {
 
 
     public void draw(FXGraphics2D graphics) {
-
-
         AffineTransform tx = new AffineTransform();
 
         graphics.setPaint(new TexturePaint(image1, new Rectangle2D.Double(0, 0,image1.getWidth(), canvas.getHeight())));
