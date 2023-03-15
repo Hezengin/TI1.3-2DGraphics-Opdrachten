@@ -30,6 +30,7 @@ public class MovingCharacter extends Application {
     private int location = 20;
 
     private BufferedImage[] originalTiles;
+    private BufferedImage stand;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,6 +46,7 @@ public class MovingCharacter extends Application {
 
         try {
             image = ImageIO.read(getClass().getResource("/images/sprite.png"));
+            stand = image.getSubimage(0,512,50,64);
             tiles = new BufferedImage[8];
             jump = new BufferedImage[8];
             //de subimages van de srite uithalen.
@@ -88,6 +90,7 @@ public class MovingCharacter extends Application {
         graphics.setBackground(Color.white);
         graphics.clearRect(0,0,1920,1080);
         AffineTransform tx = new AffineTransform();
+        tx.translate(400,400);
         tx.translate(location,0);
         System.out.println(location);
 
@@ -102,6 +105,7 @@ public class MovingCharacter extends Application {
 
         counter++;
         location += 5;
+
     }
 
     public void update(double deltaTime) {

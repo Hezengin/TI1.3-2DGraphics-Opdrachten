@@ -20,10 +20,11 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 public class FadingImage extends Application {
+
     private ResizableCanvas canvas;
-    private Image image1;
-    private Image image2;
-    private float counter = 1f;
+    private BufferedImage image1;
+    private BufferedImage image2;
+    private float alpha = 0f;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -54,6 +55,7 @@ public class FadingImage extends Application {
             }
         }.start();
 
+        stage.setResizable(false);
         stage.setScene(new Scene(mainPane));
         stage.setTitle("Fading image");
         stage.show();
@@ -62,27 +64,34 @@ public class FadingImage extends Application {
 
 
     public void draw(FXGraphics2D graphics) {
+
+
         AffineTransform tx = new AffineTransform();
 
-//        graphics.drawImage(image1,tx,null);
-        for (float i = 0; i <= 1 ; i++) {
+        graphics.setPaint(new TexturePaint(image1, new Rectangle2D.Double(0, 0,image1.getWidth(), canvas.getHeight())));
+        graphics.fill(new Rectangle2D.Double(0, 0, canvas.getWidth(), canvas.getHeight()));
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
 
-            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, i);
-            graphics.setComposite(alphaComposite);
-
-            // Draw the image with the alpha composite
-            graphics.drawImage(image1, tx, null);
-
-            // Restore the default composite (no transparency)
-            graphics.setComposite(AlphaComposite.SrcOver);
-        }
-
+        graphics.setPaint(new TexturePaint(image2, new Rectangle2D.Double(0, 0, image2.getWidth() , canvas.getHeight())));
+        graphics.fill(new Rectangle2D.Double(0, 0, canvas.getWidth(), canvas.getHeight()));
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
-
-    public void update(double deltaTime) {
-        counter -= 0.01f;
-        System.out.println(counter);
+    boolean flip = false;
+    public void update(double deltatime){
+        System.out.println(alpha);
+        if (flip){
+            alpha -= 0.005f;
+        }else{
+            alpha += 0.005f;
+        }
+        if (alpha >= 1.0f){
+            flip = true;
+            alpha = 1;
+        }else if (alpha <= 0){
+            flip = false;
+            alpha = 0;
+        }
     }
 
     public static void main(String[] args) {
