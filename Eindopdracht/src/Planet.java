@@ -22,6 +22,7 @@ public class Planet {
     public int getY(){
        return (int)this.location.getY();
     }
+
     public double getDistanceToSun() {
         return distanceToSun;
     }

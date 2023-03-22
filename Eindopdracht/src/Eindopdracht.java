@@ -87,13 +87,13 @@ import java.awt.image.BufferedImage;
             e.printStackTrace();
         }
 
-//        Planet sun = new Planet(sunPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet moon = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet mercury = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet venus = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet earth = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet mars = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet jupiter = new Planet(sun,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
+        Planet sun = new Planet(sunPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
+        Planet moon = new Planet(moonPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
+        Planet mercury = new Planet(mercuryPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
+        Planet venus = new Planet(venusPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,3);
+        Planet earth = new Planet(earthPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,2);
+        Planet mars = new Planet(marsPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
+        Planet jupiter = new Planet(jupiterPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
     }
 
     AffineTransform tx = new AffineTransform();
@@ -108,17 +108,10 @@ import java.awt.image.BufferedImage;
 
     }
 
-    double angle = 0;
-//    double distanceX = positionXSun - 100;
-//    double distanceY = positionYSun - 100;
-    double newdistanceX;
-    double newdistanceY;
+
 
     public void update(double deltaTime) {
-//        angle += 0.01;
-//        x = distanceX * Math.cos(angle);
-//        y = distanceY * Math.sin(angle);
-//        newdistanceX =
+
     }
 
 }
