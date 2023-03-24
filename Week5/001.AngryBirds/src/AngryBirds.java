@@ -1,6 +1,8 @@
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -9,10 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+
+import javax.imageio.ImageIO;
 
 public class AngryBirds extends Application {
 
@@ -22,6 +29,7 @@ public class AngryBirds extends Application {
     private Camera camera;
     private boolean debugSelected = false;
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
+    private BufferedImage background;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -62,14 +70,79 @@ public class AngryBirds extends Application {
         draw(g2d);
     }
 
-    public void init() {
+    public void init() throws IOException {
         world = new World();
         world.setGravity(new Vector2(0, -9.8));
+
+        //BackGround
+        background = ImageIO.read(getClass().getResource("/images/background.png"));
+
+        // Vloer
+        Body floor = new Body();
+        floor.addFixture(Geometry.createRectangle(40, 1));
+        floor.getTransform().setTranslation(0, -2);
+        floor.setMass(MassType.INFINITE);
+        world.addBody(floor);
+
+        //Boundry 1
+        Body boundry1 = new Body();
+        boundry1.addFixture(Geometry.createRectangle(0.15,20));
+        boundry1.getTransform().setTranslation(20,5);
+        boundry1.setMass(MassType.INFINITE);
+        world.addBody(boundry1);
+
+        //Boundry 2
+        Body boundry2 = new Body();
+        boundry2.addFixture(Geometry.createRectangle(0.15,20));
+        boundry2.getTransform().setTranslation(-20,5);
+        boundry2.setMass(MassType.INFINITE);
+        world.addBody(boundry2);
+
+        //Boundry 3
+        Body boundry3 = new Body();
+        boundry3.addFixture(Geometry.createRectangle(40,0.15));
+        boundry3.getTransform().setTranslation(0,15);
+        boundry3.setMass(MassType.INFINITE);
+        world.addBody(boundry3);
+
+        //Blocks
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                createBlocks(i,j);
+            }
+        }
+
+        //Catapult
+        Body catapult = new Body();
+        catapult.addFixture(Geometry.createRectangle(0.01,1.5));
+        catapult.getTransform().setTranslation(-6.5,-0.75);
+        catapult.setMass(MassType.INFINITE);
+        world.addBody(catapult);
+        gameObjects.add(new GameObject("/images/catapult.png",catapult,new Vector2(0,0),0.2));
+
+        //Angrybird
+        Body angryBird = new Body();
+        angryBird.addFixture(Geometry.createCircle(0.2));
+        angryBird.getTransform().setTranslation(0,2.4);
+        angryBird.setMass(MassType.NORMAL);
+        angryBird.getFixture(0).setRestitution(0.75);
+        world.addBody(angryBird);
+        gameObjects.add(new GameObject("/images/angrybird.png",angryBird,new Vector2(0,0),0.05));
+    }
+
+    private void createBlocks(double i, double j) {
+        Body block = new Body();
+        block.addFixture(Geometry.createRectangle(0.5,0.5));
+        block.getTransform().setTranslation(3+i*0.25,-1-j*0.25);
+        block.setMass(MassType.NORMAL);
+        block.getFixture(0).setRestitution(0.5);
+        world.addBody(block);
+        gameObjects.add(new GameObject("/images/block.png", block, new Vector2(0,0), 0.05));
     }
 
     public void draw(FXGraphics2D graphics) {
         graphics.setTransform(new AffineTransform());
-        graphics.setBackground(Color.white);
+        graphics.setPaint(new TexturePaint(background, new Rectangle2D.Double(0, 0,canvas.getWidth(), canvas.getHeight())));
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
         AffineTransform originalTransform = graphics.getTransform();

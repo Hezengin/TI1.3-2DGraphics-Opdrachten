@@ -48,14 +48,13 @@ public class Screensaver extends Application {
         draw(g2d);
     }
 
-
     public void draw(FXGraphics2D graphics) {
         graphics.setTransform(new AffineTransform());
         graphics.setBackground(Color.black);
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
         // Draw points and then add the point that is being drawn to the lines arraylist
-        graphics.setColor(Color.BLUE);
+        graphics.setColor(Color.blue);
         for (int i = 0; i < points.size() - 1; i++) {
             graphics.drawLine((int) points.get(i).getX() - 10, (int) points.get(i).getY() - 10, (int) points.get(i + 1).getX() - 10 , (int) points.get(i + 1).getY() - 10);
             lines.add(new Line2D.Double((int) points.get(i).getX() - 10, (int) points.get(i).getY() - 10, (int) points.get(i + 1).getX() - 10 , (int) points.get(i + 1).getY() - 10));

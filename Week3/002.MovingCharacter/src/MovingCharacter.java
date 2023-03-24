@@ -28,7 +28,6 @@ public class MovingCharacter extends Application {
     private double angle = 0.0;
     private int counter = 0;
     private int location = 20;
-
     private BufferedImage[] originalTiles;
     private BufferedImage stand;
 
@@ -87,6 +86,7 @@ public class MovingCharacter extends Application {
     }
 
     public void draw(FXGraphics2D graphics) {
+        boolean state = false;
         graphics.setBackground(Color.white);
         graphics.clearRect(0,0,1920,1080);
         AffineTransform tx = new AffineTransform();
@@ -97,10 +97,15 @@ public class MovingCharacter extends Application {
         if (counter > 7){
             counter = 0;
         }
-        if (location > 1900){
-            location = 0;
-            tx.translate(location,0);
+        if (location > 1500){
+            state = true;
+        }else if (location < 10){
+            state = false;
         }
+        if (state){
+            location-=5;
+        }
+
         graphics.drawImage(tiles[counter],tx,null);
 
         counter++;

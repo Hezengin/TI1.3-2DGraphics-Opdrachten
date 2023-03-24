@@ -34,7 +34,7 @@ public class GradientPaintExercise extends Application {
         Color[] colors = {Color.BLACK, Color.BLUE, Color.CYAN, Color.DARK_GRAY, Color.GRAY,//er mag geen 2 dezelfde elementen in de array zitten
                 Color.GREEN, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK};//Lengte van fractions en colors moet hetzelfde zijn anders krijg je exception
         float[] fractions = {0,0.1f,0.2f,0.3f,0.4f,0.5f,0.6f,0.7f,0.8f,0.9f};//stop heeft 2 parameters eerste element van colors en eerste element van fractions,
-        //als de lengtes van de arrays niet gelijk zijn geeft code fout.Want de ene heb je wel andere niet
+        // als de lengtes van de arrays niet gelijk zijn geeft code fout.Want de ene heb je wel andere niet
 
         canvas.setOnMouseDragged(event -> {
             double x = event.getX();

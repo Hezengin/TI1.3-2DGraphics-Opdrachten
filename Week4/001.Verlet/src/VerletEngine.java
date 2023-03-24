@@ -79,31 +79,31 @@ public class VerletEngine extends Application {
         canvas.setOnMouseDragged(e -> mouseDragged(e));
 
 
-        Button doekButton = new Button("Make cloth");
-        Button switchScene = new Button("Add a Cloth");
-        HBox box = new HBox();
-        box.getChildren().add(doekButton);
+//        Button doekButton = new Button("Make cloth");
+//        Button switchScene = new Button("Add a Cloth");
+//        HBox box = new HBox();
+//        box.getChildren().add(doekButton);
+//
+//        pane.setTop(box);
+//        mainPane.setCenter(canvas2);
+//
+//        Scene scene = new Scene(pane);
 
-        pane.setTop(box);
-        mainPane.setCenter(canvas2);
+//        switchScene.setOnMouseClicked(event -> {
+//            stage.setScene(scene);
+//        });
 
-        Scene scene = new Scene(pane);
-
-        switchScene.setOnMouseClicked(event -> {
-            stage.setScene(scene);
-        });
-
-        doekButton.setOnMouseClicked(event -> {
-            Canvas canvas = new Canvas();
-            Point2D point = new Point2D.Double(100, 100);
-            canvas.addPoint(point);
-            Constraint constraint = new DistanceConstraint(point, new Point2D.Double(0, 0), 50);
-            canvas.addConstraint(constraint);
-            canvas.draw(g2d);
-        });
+//        doekButton.setOnMouseClicked(event -> {
+//            Canvas canvas = new Canvas();
+//            Point2D point = new Point2D.Double(100, 100);
+//            canvas.addPoint(point);
+//            Constraint constraint = new DistanceConstraint(point, new Point2D.Double(0, 0), 50);
+//            canvas.addConstraint(constraint);
+//            canvas.draw(g2d);
+//        });
 
 
-        mainPane.setTop(switchScene);
+//        mainPane.setTop(switchScene);
 
         stage.setScene(new Scene(mainPane));
         stage.setTitle("Verlet Engine");

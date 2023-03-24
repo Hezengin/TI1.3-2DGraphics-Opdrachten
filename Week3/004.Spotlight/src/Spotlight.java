@@ -26,17 +26,14 @@
     public class Spotlight extends Application {
         private ResizableCanvas canvas;
         private Shape shape ;
-        BorderPane mainPane = new BorderPane();
+        private BorderPane mainPane = new BorderPane();
 
         @Override
         public void start(Stage stage) throws Exception
         {
 
-
-
             mainPane.setCenter(canvas);
             FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
-
 
             canvas.setOnMouseDragged(event -> mouseDragged(event,g2d));
             new AnimationTimer() {
@@ -58,7 +55,6 @@
             stage.show();
         }
 
-
         public void draw(FXGraphics2D graphics)
         {
             graphics.setTransform(new AffineTransform());
@@ -67,9 +63,6 @@
             graphics.setColor(Color.BLACK);
             graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
-
-
-//            graphics.draw(shape);
             graphics.clip(shape);
 
             Random r = new Random();
