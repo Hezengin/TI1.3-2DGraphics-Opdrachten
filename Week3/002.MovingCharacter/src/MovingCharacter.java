@@ -84,37 +84,41 @@ public class MovingCharacter extends Application {
         stage.show();
         draw(g2d);
     }
-
+    boolean state = false;
     public void draw(FXGraphics2D graphics) {
-        boolean state = false;
+
         graphics.setBackground(Color.white);
         graphics.clearRect(0,0,1920,1080);
         AffineTransform tx = new AffineTransform();
-        tx.translate(400,400);
-        tx.translate(location,0);
+
         System.out.println(location);
 
         if (counter > 7){
             counter = 0;
         }
-        if (location > 1500){
-            state = true;
-        }else if (location < 10){
-            state = false;
-        }
         if (state){
             location-=5;
+            tx.translate(location,0);
+        }else {
+            location += 5;
+            tx.translate(location,0);
+        }
+
+        if (location > 1500){
+            state = true;
+            System.out.println("T");
+        }
+        if (location < 10){
+            state = false;
         }
 
         graphics.drawImage(tiles[counter],tx,null);
-
         counter++;
-        location += 5;
-
     }
 
     public void update(double deltaTime) {
         angle += 0.0005;
+
     }
 
     private void jump() {
@@ -122,7 +126,12 @@ public class MovingCharacter extends Application {
         tiles = jump;
         new Thread(() -> {
             for (int i = 0; i < 15; i++) {
-                location += 5;
+                if (state){
+                    location -= 5;
+                }else{
+                    location += 5;
+                }
+
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {

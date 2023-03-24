@@ -123,7 +123,7 @@ public class AngryBirds extends Application {
         //Angrybird
         Body angryBird = new Body();
         angryBird.addFixture(Geometry.createCircle(0.2));
-        angryBird.getTransform().setTranslation(0,2.4);
+        angryBird.getTransform().setTranslation(-5,2.4);
         angryBird.setMass(MassType.NORMAL);
         angryBird.getFixture(0).setRestitution(0.75);
         world.addBody(angryBird);
