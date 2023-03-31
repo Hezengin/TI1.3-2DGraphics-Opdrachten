@@ -9,40 +9,34 @@ import org.jfree.fx.ResizableCanvas;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.SplittableRandom;
 
-    public class Eindopdracht extends Application {
+public class Eindopdracht extends Application {
 
-        private Canvas canvas;
-        private FXGraphics2D g2d;
-        private BufferedImage sunPic;
-        private BufferedImage earthPic;
-        private BufferedImage marsPic;
-        private BufferedImage mercuryPic;
-        private BufferedImage neptunePic;
-        private BufferedImage saturnPic;
-        private BufferedImage uranusPic;
-        private BufferedImage venusPic;
-        private BufferedImage moonPic;
-        private BufferedImage plutonPic;
-        private BufferedImage jupiterPic;
-        private BufferedImage backGroundPic;
-        Planet sun;
-    @Override
+    static Canvas canvas;
+    private FXGraphics2D g2d;
+    private ArrayList<Planet> planets = new ArrayList<>();
+
+    //Images
+    private BufferedImage background;
+    private BufferedImage sun;
+    private BufferedImage earth;
+    private BufferedImage mercury;
+    private BufferedImage mars;
+    private BufferedImage venus;
+        @Override
     public void start(Stage primaryStage) throws Exception {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
-        canvas.setWidth(1920);
-        canvas.setHeight(1080);
         mainPane.setCenter(canvas);
         g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
-
         new AnimationTimer() {
             long last = -1;
-
             @Override
             public void handle(long now) {
                 if (last == -1)
@@ -59,59 +53,54 @@ import java.awt.image.BufferedImage;
     }
 
     public void init() {
-        try {
-            //loading pictures
-            backGroundPic = ImageIO.read(getClass().getResource("/background.png"));
-            sunPic = ImageIO.read(getClass().getResource("/sun.png"));
-            earthPic = ImageIO.read(getClass().getResource("/earth.png"));
-            marsPic = ImageIO.read(getClass().getResource("/mars.png"));
-            jupiterPic = ImageIO.read(getClass().getResource("/jupiter.png"));
-            saturnPic = ImageIO.read(getClass().getResource("/saturn.png"));
-            uranusPic = ImageIO.read(getClass().getResource("/uranus.png"));
-            venusPic = ImageIO.read(getClass().getResource("/venus.png"));
-            neptunePic = ImageIO.read(getClass().getResource("/neptune.png"));
-            plutonPic = ImageIO.read(getClass().getResource("/pluton.png"));
-            mercuryPic = ImageIO.read(getClass().getResource("/mercury.png"));
-            moonPic = ImageIO.read(getClass().getResource("/mercury.png"));
-            // images in draw
-//            graphics.drawImage(venus,(int) canvas.getWidth() / 2 - 15 - startPos * 2,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(earth,(int) canvas.getWidth() / 2 - 15 - startPos * 3,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(mars,(int) canvas.getWidth() / 2 - 15 - startPos * 4,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(jupiter,(int) canvas.getWidth() / 2 - 15 - startPos * 5,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(saturn,(int) canvas.getWidth() / 2 - 25 - startPos * 6,(int) canvas.getHeight() / 2 - 15,50,30,null);
-//            graphics.drawImage(uranus,(int) canvas.getWidth() / 2 - 15 - startPos * 7,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(neptune,(int) canvas.getWidth() / 2 - 15 - startPos * 8,(int) canvas.getHeight() / 2 - 15,30,30,null);
-//            graphics.drawImage(pluton,(int) canvas.getWidth() / 2 - 15 - startPos * 9,(int) canvas.getHeight() / 2 - 15,30,30,null);
+        try{
+            System.out.println("---------------------");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            background = ImageIO.read(getClass().getResource("/images/background.png"));
+            sun = ImageIO.read(getClass().getResource("/images/sun.png"));
+            earth = ImageIO.read(getClass().getResource("/images/earth.png"));
+            mercury = ImageIO.read(getClass().getResource("/images/mercury.png"));
+            mars = ImageIO.read(getClass().getResource("/images/mars.png"));
+            venus = ImageIO.read(getClass().getResource("/images/venus.png"));
+
+
+            System.out.println("Images Loaded");
+
+            Planet sun = new Planet(0,0,30,Color.YELLOW,1.98892 * Math.pow(10,30));
+
+            Planet earth = new Planet(-1 * Planet.AU,0,16,Color.BLUE,5.9742 * Math.pow(10,24));
+            earth.setYVel(29.783 * 1000);
+
+            Planet mars = new Planet(1.524 * Planet.AU,0,12,Color.RED,6.39 * Math.pow(10,23));
+            mars.setYVel(-24.077 * 1000);
+
+            Planet mercury = new Planet(0.387 * Planet.AU,0,8,Color.DARK_GRAY,3.3 * Math.pow(10,23));
+            mercury.setYVel(-47.4 * 1000);
+
+            Planet venus = new Planet(0.723 * Planet.AU,0,14,Color.WHITE,4.8685 * Math.pow(10,24));
+            venus.setYVel(-35.02 * 1000);
+
+            sun.setSun(true);
+
+            Collections.addAll(planets,sun,earth,mars,mercury,venus);
+        }catch (Exception e){
+                e.printStackTrace();
         }
-
-//        Planet sun = new Planet(sunPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet moon = new Planet(moonPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet mercury = new Planet(mercuryPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet venus = new Planet(venusPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,3);
-//        Planet earth = new Planet(earthPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,2);
-//        Planet mars = new Planet(marsPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
-//        Planet jupiter = new Planet(jupiterPic,(int)canvas.getWidth()/2,(int) canvas.getHeight()/2,0);
     }
 
-    AffineTransform tx = new AffineTransform();
-//    int positionXSun = (int) canvas.getWidth() / 2 - 64;
-//    int positionYSun = (int) canvas.getHeight() / 2 - 64;
+    private void draw(FXGraphics2D graphics) {
 
-    public void draw(FXGraphics2D graphics) {
-        sun = new Planet(sunPic,(int)canvas.getWidth()/2 - 64,(int) canvas.getHeight()/2 - 64,0);
-        graphics.drawImage(backGroundPic, 0, 0, (int) canvas.getWidth(), (int) canvas.getHeight(), null);
-        graphics.drawImage(sun.getPlanetImage(),sun.getX(), sun.getY() ,null);
-        graphics.setTransform(tx);
+        graphics.setPaint(new TexturePaint(background,new Rectangle2D.Double(0, 0,canvas.getWidth(), canvas.getHeight())));
+        graphics.fillRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
+        for (Planet planet : planets) {
+            planet.draw(graphics);
+        }
     }
-
-
 
     public void update(double deltaTime) {
-
+        for (Planet planet : planets) {
+            planet.update(planets);
+        }
     }
-
 }
