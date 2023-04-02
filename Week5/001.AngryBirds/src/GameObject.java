@@ -42,6 +42,5 @@ public class GameObject {
 
         tx.translate(-image.getWidth() / 2, -image.getHeight() / 2);
         g2d.drawImage(image, tx, null);
-
     }
 }

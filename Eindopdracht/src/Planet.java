@@ -1,70 +1,70 @@
-import com.sun.javafx.geom.Line2D;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Affine;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
 public class Planet {
     static double AU = 149.6e6 * 1000;//austronomical unit in km 28.8
+    private static double SCALE = 30 / AU;//1 AU = 100 pixels
     private double G = 6.67428e-11;//gravity constant
-    private double SCALE = 200 / AU;//1 AU = 100 pixels
-    private double TIMESTEP = 3600 * 5;//1 day
+    private double TIMESTEP = 3600 * 24;//1 day
     private int radius;
     private double x;
     private double y;
     private double mass;
-    private double distanceToSun;
     private double xVel;
     private double yVel;
     private Color color;
-    boolean isSun;
+    private boolean isSun;
+    private String name;
     private List<Point> orbit;
-    final double sunMass = 1.989E30;
-    double orbitalPeriodInSeconds;
-    double time = 0;
+    private final double sunMass = 1.989E30;
 
-    public Planet(double x, double y, int radius, Color color, double mass) {
+    private double orbitalPeriodInSeconds;
+    private double time = 0;
+
+    private BufferedImage image;
+    private int[] xPoints;
+    private int[] yPoints;
+
+    public Planet() {
+
+    }
+
+    public Planet(String name, BufferedImage image, double x, double y, int radius, Color color, double mass) {
+        this.name = name;
+        this.image = image;
         this.x = x;
         this.y = y;
         this.mass = mass;
         this.radius = radius;
         this.color = color;
 
-        this.distanceToSun = 0;//update for each planet
-        this.isSun = false;
         this.yVel = 0;
         this.xVel = 0;
-        this.orbit = new LinkedList<>();
+        this.orbit = new ArrayList<>();
 
         this.orbitalPeriodInSeconds = 2 * Math.PI * Math.sqrt(Math.pow(Math.abs(x), 3) / (G * sunMass));
     }
 
-    public void setSun(boolean sun) {
-//        System.out.println("planet status before:" + isSun);
-        isSun = sun;
-//        System.out.println("planet status after:" + isSun);
-    }
-
     public void draw(FXGraphics2D graphics) {
-        double x = this.x * SCALE + 1920 / 2;
-        double y = this.y * SCALE + 1080 / 2;
+        double x = this.x * SCALE + Eindopdracht.canvas.getWidth() / 2;
+        double y = this.y * SCALE + Eindopdracht.canvas.getHeight() / 2;
 
-        if (this.time > this.orbitalPeriodInSeconds) {
-            this.orbit.remove(0);
-        }
-        System.out.println(orbit.size());
-        graphics.setColor(this.color);
         this.orbit.add(new Point((int) x, (int) y));
-
         if (this.orbit.size() > 2) {
 
+            graphics.setColor(this.color);
+            if (this.time > this.orbitalPeriodInSeconds * 1.2) {
+                this.orbit.remove(0);
+            }
             List<Point> updatedList = new ArrayList<>();
             for (Point point : this.orbit) {
                 int px = point.x;
@@ -73,8 +73,8 @@ public class Planet {
                 updatedList.add(new Point(px, py));
             }
 
-            int[] xPoints = new int[updatedList.size()];
-            int[] yPoints = new int[updatedList.size()];
+            xPoints = new int[updatedList.size()];
+            yPoints = new int[updatedList.size()];
 
             for (int i = 0; i < updatedList.size(); i++) {
                 Point p = updatedList.get(i);
@@ -84,8 +84,11 @@ public class Planet {
             graphics.drawPolyline(xPoints, yPoints, updatedList.size());
         }
 
-
-        graphics.fillOval((int) (x - radius / 2), (int) (y - radius / 2), radius, radius);
+        if (this.name.equals("saturn")) {
+            graphics.drawImage(this.image, (int) (x - radius), (int) (y - radius / 2), (radius * 2), radius, null);
+        } else {
+            graphics.drawImage(this.image, (int) (x - radius / 2), (int) (y - radius / 2), radius, radius, null);
+        }
     }
 
     public void update(ArrayList<Planet> planetList) {
@@ -93,29 +96,24 @@ public class Planet {
 
         double totalForceX = 0;
         double totalForceY = 0;
-        for (Planet planet1 : planetList) {
-            if (this == planet1)
-                continue;
 
-            double distanceX = planet1.x - this.x;
-            double distanceY = planet1.y - this.y;
+        for (Planet planet : planetList) {
+            if (this == planet) continue;
+
+            double distanceX = planet.x - this.x;
+            double distanceY = planet.y - this.y;
             double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            double force = (G * this.mass * planet1.mass) / Math.pow(distance, 2);
+            double force = (G * this.mass * planet.mass) / Math.pow(distance, 2);
 
-            // Calculate the x and y components of the force
             double forceX = force * (distanceX / distance);
             double forceY = force * (distanceY / distance);
 
-            // Update the total force
             totalForceX += forceX;
             totalForceY += forceY;
         }
 
-        // Calculate the x and y components of the acceleration
         double accelX = totalForceX / this.mass;
         double accelY = totalForceY / this.mass;
-
-        // Update the velocity and position of the planet
         this.xVel += accelX * TIMESTEP;
         this.yVel += accelY * TIMESTEP;
         this.x += this.xVel * TIMESTEP;
